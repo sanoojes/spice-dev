@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanooj.uk/spice-cli/schema/v1.json",
+  "title": "Spice CLI Config v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "name", "entry"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema URL for editor tooling. Ignored by the CLI."
+    },
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Config schema version."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Extension name."
+    },
+    "entry": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Relative path to the main entry file."
+    },
+    "outDir": {
+      "type": "string",
+      "minLength": 1,
+      "default": "dist",
+      "description": "Build output directory."
+    },
+    "framework": {
+      "type": "string",
+      "enum": ["react", "vanilla"],
+      "default": "vanilla",
+      "description": "UI framework."
+    },
+    "language": {
+      "type": "string",
+      "enum": ["ts", "js"],
+      "default": "ts",
+      "description": "Source language."
+    },
+    "linter": {
+      "type": "string",
+      "enum": ["eslint", "biome", "none"],
+      "default": "biome",
+      "description": "Linter used in the project."
+    }
+  }
+}
