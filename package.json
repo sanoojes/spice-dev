@@ -1,0 +1,35 @@
+{
+  "name": "spice-dev",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "spice-cli": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun ./build.ts",
+    "dev": "bun ./src/index.ts",
+    "dev:node": "SPICE_RUNNER=node bun ./build.ts --run",
+    "biome:format": "bunx biome format --write",
+    "biome:check": "bunx biome check --write",
+    "biome:lint": "bunx biome lint --write"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/cross-spawn": "^6.0.6",
+    "esbuild": "^0.27.1",
+    "typescript": "^5",
+    "@biomejs/biome": "2.3.8"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "commander": "^14.0.2",
+    "cross-spawn": "^7.0.6"
+  }
+}

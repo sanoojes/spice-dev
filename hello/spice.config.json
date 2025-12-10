@@ -1,0 +1,11 @@
+{
+  "$schema": "https://sanooj.uk/spice-dev/schema/v1.json",
+  "version": "1.0.0",
+  "name": "hello",
+  "entry": "./src/app.tsx",
+  "type": "extension",
+  "framework": "react",
+  "language": "ts",
+  "linter": "biome",
+  "outDir": "dist"
+}
