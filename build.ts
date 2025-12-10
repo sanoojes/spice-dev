@@ -12,7 +12,7 @@ async function runBuild(shouldRun: boolean, appArgs: string[]) {
   console.log(pc.cyan("Starting Bun build...\n"));
 
   const result = await build({
-    entrypoints: ["./src/index.ts"],
+    entrypoints: ["./src/index.ts", "./client/index.ts"],
     outdir: "./dist",
     target: "node",
     format: "esm",

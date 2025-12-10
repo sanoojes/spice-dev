@@ -6,6 +6,7 @@
     "module": "Preserve",
     "moduleDetection": "force",
     "jsx": "react-jsx",
+    "types": ["spice-dev/client"],
     "allowJs": true,
 
     // Bundler mode
