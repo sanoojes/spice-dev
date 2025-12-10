@@ -8,19 +8,23 @@ export class FileManager {
   private filesToCopy: CopyData[] = [];
 
   constructor(
-    private currentFromDir: string,
-    private readonly projectDir: string,
+    private fromDir: string,
+    private toDir: string,
   ) {}
 
   setFromDir(dir: string): this {
-    this.currentFromDir = dir;
+    this.fromDir = dir;
+    return this;
+  }
+  setToDir(dir: string): this {
+    this.toDir = dir;
     return this;
   }
 
   addFile(from: string, to: string): this {
     this.filesToCopy.push({
-      from: join(this.currentFromDir, from),
-      to: join(this.projectDir, to),
+      from: join(this.fromDir, from),
+      to: join(this.toDir, to),
     });
     return this;
   }

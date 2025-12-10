@@ -18,7 +18,8 @@ async function runBuild(shouldRun: boolean, appArgs: string[]) {
     format: "esm",
     sourcemap: "external",
     minify: true,
-    splitting: false,
+    splitting: true,
+    tsconfig: "tsconfig.json",
   });
 
   if (!result.success) {

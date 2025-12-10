@@ -1,8 +1,9 @@
 import { Command } from "commander";
-import { init } from "@/command/init";
 import { build } from "@/command/build";
 import { dev } from "@/command/dev";
+import { init } from "@/command/init";
 import { parsePkgManager } from "@/helpers/init/parsePkgManager";
+import { getPkgManager } from "@/utils/getPkgManager";
 
 const program = new Command();
 
@@ -22,7 +23,7 @@ program
     "-u, --use <pkg-manager>",
     "Package manager to use (npm, pnpm, yarn, bun)",
     parsePkgManager,
-    "npm",
+    getPkgManager(),
   )
   .option("--skip-install", "Skip installation of packages.", false)
   .action(init);
@@ -32,7 +33,7 @@ program
   .command("build")
   .description("Build the Spicetify theme/extension for production")
   .option("-w, --watch", "Rebuild on file changes", false)
-  .option("--minify", "Minify the output bundle", true)
+  .option("-m, --minify", "Minify the output bundle", false)
   .option("--sourcemap", "Generate source maps", false)
   .action(build);
 
@@ -40,9 +41,9 @@ program
 program
   .command("dev")
   .description("Run the Spicetify theme/extension in dev mode")
-  .option("-p, --port <port>", "Port for the dev server", "5173")
-  .option("-o, --open", "Open the dev UI in your browser", false)
-  .option("-w, --watch", "Watch files and rebuild on change", true)
-  .action(dev);
+  .option("-w, --watch", "Rebuild on file changes", true)
+  .option("-m, --minify", "Minify the output bundle", true)
+  .option("--sourcemap", "Generate source maps", true)
+  .action(build);
 
 program.parse();

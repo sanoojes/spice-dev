@@ -1,12 +1,12 @@
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import * as p from "@clack/prompts";
+import { createTemplate } from "@root/template";
+import { BIOME_JS_VERSION } from "@/constants";
 import { installPackages } from "@/helpers/init/installPackages";
 import type { InitAnswers } from "@/types/init";
 import { exists } from "@/utils/fs";
 import { PackageJsonBuilder } from "@/utils/PackageJsonBuilder";
-import { BIOME_JS_VERSION } from "@/constants";
-import { createTemplate } from "@root/template";
 
 export async function createExtension(answers: InitAnswers) {
   p.log.step(`Creating extension: ${answers.projectName}`);

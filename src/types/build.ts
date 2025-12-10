@@ -1,8 +1,8 @@
 import type { Command } from "commander";
 
-export type CLIOptions = {
+export type BuildCLIOptions = {
   watch?: boolean;
   minify?: boolean;
   sourcemap?: boolean;
 };
-export type BuildAction = (options: CLIOptions, command: Command) => void;
+export type BuildAction = (options: BuildCLIOptions, command: Command) => void;

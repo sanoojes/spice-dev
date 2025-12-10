@@ -1,0 +1,92 @@
+import { context, build as esbuild } from "esbuild";
+import type { BuildAction } from "@/types/build";
+
+import pc from "picocolors";
+import readline from "node:readline";
+import { createBuildOptions } from "@/helpers/createBuildOptions";
+
+const HELP_TEXT = `
+Shortcuts
+  h + enter   show help
+  r + enter   rebuild
+  q + enter   quit
+`;
+
+export const build: BuildAction = async (opts) => {
+  try {
+    const { watch, minify, sourcemap } = opts;
+    const buildOptions = await createBuildOptions({
+      watch,
+      minify,
+      sourcemap,
+      hmr: false,
+    });
+
+    let ctx: Awaited<ReturnType<typeof context>> | null = null;
+
+    if (watch) {
+      ctx = await context(buildOptions);
+      await ctx.watch();
+    } else {
+      await esbuild(buildOptions);
+      return;
+    }
+
+    console.log(
+      `${pc.green(" ➜ ")} press ${pc.bold("h + enter")} to show help`,
+    );
+    console.log(`${pc.green(" ➜ ")} press ${pc.bold("r + enter")} to rebuild`);
+    console.log(`${pc.green(" ➜ ")} press ${pc.bold("q + enter")} to quit`);
+
+    console.log("");
+
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    const doRebuild = async () => {
+      try {
+        if (ctx) {
+          await ctx.rebuild();
+        } else {
+          await esbuild(buildOptions);
+        }
+      } catch {}
+    };
+
+    rl.on("line", async (input) => {
+      const cmd = input.trim();
+
+      switch (cmd) {
+        case "h":
+          console.log(HELP_TEXT);
+          break;
+
+        case "r":
+        case "rs":
+          await doRebuild();
+          break;
+
+        case "q":
+          rl.close();
+          process.exit(0);
+          break;
+
+        case "":
+          break;
+
+        default:
+          console.log(`Unknown command: "${cmd}". Press h + enter for help.`);
+      }
+    });
+
+    rl.on("SIGINT", () => {
+      rl.close();
+      process.exit(0);
+    });
+  } catch (err) {
+    console.error("Build failed:", err);
+    process.exitCode = 1;
+  }
+};

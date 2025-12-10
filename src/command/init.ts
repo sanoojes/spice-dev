@@ -1,14 +1,13 @@
 import { join, relative } from "node:path";
 import { chdir, cwd } from "node:process";
 import * as p from "@clack/prompts";
+import { bold, cyan, green, red } from "picocolors";
 import { linterOptions, templateOptions } from "@/constants";
-import { getPkgManager } from "@/helpers/getPkgManager";
 import { createExtension } from "@/helpers/init/createExtension";
 import { createTheme } from "@/helpers/init/createTheme";
+import type { Linter } from "@/types/config";
 import type { InitAction, InitAnswers } from "@/types/init";
 import { ensureDir, exists, isEmptyDir } from "@/utils/fs";
-import type { Linter } from "@/types/config";
-import { green, bold, cyan, red } from "picocolors";
 
 export const init: InitAction = async (name, options) => {
   try {
@@ -126,8 +125,8 @@ export const init: InitAction = async (name, options) => {
         pkgManager: async () => {
           // TODO: Add a prompt ?
           // i don't think its necessary and use the pkgManager thats used to init
-          // DEFAULT: npm
-          return options.use ?? getPkgManager();
+          // DEFAULT: currently using one
+          return options.use;
         },
       },
       {

@@ -1,9 +1,8 @@
-import schema from "@root/schema/v1.json";
-
-import Ajv, { type ValidateFunction } from "ajv";
-import addFormats from "ajv-formats";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import schema from "@root/schema/v1.json";
+import Ajv, { type ValidateFunction } from "ajv";
+import addFormats from "ajv-formats";
 import type { Config } from "@/types/config";
 
 const CONFIG_FILENAME = "spice.config.json";
