@@ -6,7 +6,7 @@ import { copyFilesToSpotify } from "@/helpers/esbuild/plugins/copyFilesToSpotify
 import { externalGlobal } from "@/helpers/esbuild/plugins/externalGlobal";
 import { createHmrClient } from "@/helpers/esbuild/plugins/hmrClient";
 import { createHmrServer } from "@/helpers/esbuild/plugins/hmrServer";
-import { logger } from "@/helpers/esbuild/plugins/logger";
+import { buildLogger } from "@/helpers/esbuild/plugins/logger";
 import { postcssPlugin } from "@/helpers/esbuild/plugins/postcss";
 import { getConfig } from "@/utils/config";
 import { findAvailablePort } from "@/utils/port";
@@ -39,7 +39,7 @@ export const createBuildOptions = async (opts: {
   }
 
   const plugins: Plugin[] = [
-    logger(config),
+    buildLogger(config),
     postcssPlugin({
       plugins: [postcssNested, autoprefixer],
       sourcemap,

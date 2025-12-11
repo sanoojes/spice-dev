@@ -1,6 +1,7 @@
+#!/usr/bin/env node
+
 import { Command } from "commander";
 import { build } from "@/command/build";
-import { dev } from "@/command/dev";
 import { init } from "@/command/init";
 import { parsePkgManager } from "@/helpers/init/parsePkgManager";
 import { getPkgManager } from "@/utils/getPkgManager";

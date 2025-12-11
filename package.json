@@ -1,6 +1,6 @@
 {
   "name": "spice-dev",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "keywords": [
     "spicetify",
     "theme",
@@ -28,18 +28,27 @@
   },
   "files": [
     "dist",
-    "README.md",
-    "LICENSE",
+    "client",
     "template",
-    "schema"
+    "schema",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
-    "biome:check": "bunx biome check --write",
-    "biome:format": "bunx biome format --write",
-    "biome:lint": "bunx biome lint --write",
-    "build": "bun ./build.ts",
-    "dev": "bun ./src/index.ts",
-    "dev:node": "SPICE_RUNNER=node bun ./build.ts --run"
+    "build": "bun build ./src/index.ts --target node --outdir dist --minify --sourcemap=none",
+    "build:dev": "bun run build --watch",
+    "dev": " ./src/index.ts",
+    "dev:node": "bun run build && node ./dist/index.js",
+    "check": "bunx biome check",
+    "check:fix": "bunx biome check --write",
+    "format": "bunx biome format",
+    "format:fix": "bunx biome format --write",
+    "lint": "bunx biome lint",
+    "lint:fix": "bunx biome lint --write",
+    "prepack": "bun run build",
+    "pack:dev": "bun pm pack",
+    "prepublish": "bun run lint && bun run typecheck && bun run build",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@clack/prompts": "^0.11.0",
@@ -50,6 +59,7 @@
     "cross-spawn": "^7.0.6",
     "esbuild": "^0.27.1",
     "postcss-nested": "^7.0.2",
+    "spice-dev": "file:spice-dev-1.0.0.tgz",
     "ws": "^8.18.3"
   },
   "devDependencies": {

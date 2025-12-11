@@ -116,7 +116,7 @@ async function createPackageJson(answers: InitAnswers) {
     },
     dependencies: {},
     devDependencies: {
-      // "spice-cli": "0.1.0", // IMPORTANT: Add this in npm
+      "spice-cli": "^1.0.1",
     },
   });
 

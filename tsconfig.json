@@ -33,8 +33,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@client/*": ["./client/*"],
       "@root/*": ["./*"]
     }
   },
-  "exclude": ["template"]
+  "exclude": ["template", "client/types/spicetify.d.ts"]
 }

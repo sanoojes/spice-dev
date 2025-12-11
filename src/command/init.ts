@@ -1,7 +1,7 @@
 import { join, relative } from "node:path";
 import { chdir, cwd } from "node:process";
 import * as p from "@clack/prompts";
-import { bold, cyan, green, red } from "picocolors";
+import * as pc from "picocolors";
 import { linterOptions, templateOptions } from "@/constants";
 import { createExtension } from "@/helpers/init/createExtension";
 import { createTheme } from "@/helpers/init/createTheme";
@@ -21,12 +21,16 @@ export const init: InitAction = async (name, options) => {
         // PROJECT NAME
         projectName: async () =>
           !name
-            ? ((await p.text({
-                message: "Where would you like your project to be created?",
-                placeholder: "(hit Enter to use './')",
-                defaultValue: "./",
-              })) as string)
-            : name,
+            ? (
+                await p.text({
+                  message: "Where would you like your project to be created?",
+                  placeholder: "(hit Enter to use './')",
+                  defaultValue: "./",
+                })
+              )
+                .toString()
+                .trim()
+            : name.trim(),
 
         // PROJECT DIR
         projectDir: async ({
@@ -170,13 +174,13 @@ export const init: InitAction = async (name, options) => {
 
     p.note(
       [
-        `${bold("Location:")} ${answers.projectDir}`,
-        `${bold("Template:")} ${templateLabel}`,
-        `${bold("Linter:")} ${linterLabel}`,
-        `${bold("Package Manager:")} ${answers.pkgManager}`,
-        `${bold("React:")} ${answers.useReact ? green("enabled") : red("disabled")}`,
-        `${bold("TypeScript:")} ${
-          answers.useTs ? green("enabled") : red("disabled")
+        `${pc.bold("Location:")} ${answers.projectDir}`,
+        `${pc.bold("Template:")} ${templateLabel}`,
+        `${pc.bold("Linter:")} ${linterLabel}`,
+        `${pc.bold("Package Manager:")} ${answers.pkgManager}`,
+        `${pc.bold("React:")} ${answers.useReact ? pc.green("enabled") : pc.red("disabled")}`,
+        `${pc.bold("TypeScript:")} ${
+          answers.useTs ? pc.green("enabled") : pc.red("disabled")
         }`,
       ].join("\n"),
       "Project settings",
@@ -191,15 +195,15 @@ export const init: InitAction = async (name, options) => {
       [
         `cd ${cdPath}`,
         "",
-        `${bold("To Start dev server:")} ${green(
+        `${pc.bold("To Start dev server:")} ${pc.green(
           `${answers.pkgManager} run dev`,
         )}`,
-        `${bold("To Build for outDir:")} ${green(
+        `${pc.bold("To Build for outDir:")} ${pc.green(
           `${answers.pkgManager} run build`,
         )}`,
         "",
-        `${bold("Publish to Spicetify Marketplace:")}`,
-        cyan(
+        `${pc.bold("Publish to Spicetify Marketplace:")}`,
+        pc.cyan(
           "https://github.com/spicetify/marketplace/wiki/Publishing-to-Marketplace",
         ),
       ].join("\n"),
