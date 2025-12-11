@@ -2,10 +2,11 @@
 
 import { Command } from "commander";
 import { build } from "@/command/build";
+import { dev } from "@/command/dev";
 import { init } from "@/command/init";
+import { BANNER } from "@/constants/project";
 import { parsePkgManager } from "@/utils/cliParser";
 import { getPkgManager } from "@/utils/getPkgManager";
-import { BANNER } from "./constants/project";
 
 const program = new Command();
 
@@ -39,5 +40,24 @@ program
   .option("-m, --minify", "Minify the output bundle", false)
   .option("--sourcemap", "Enables inline sourcemap", false) // gotta test if it will work
   .action(build);
+
+//  dev
+program
+  .command("dev")
+  .description("Starts dev environment Spicetify theme/extension")
+  .option(
+    "-p, --port <number>",
+    "Port to run the dev server on",
+    (v) => {
+      const parsed = Number(v);
+      if (!Number.isFinite(parsed)) {
+        throw new Error(`Invalid Port: "${v}" is not a valid number.`);
+      }
+
+      return parsed;
+    },
+    5173,
+  )
+  .action(dev);
 
 program.parse();

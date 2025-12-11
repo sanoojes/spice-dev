@@ -1,6 +1,6 @@
 import type { Command } from "commander";
-import type { PkgManager } from "@/utils/cliParser";
 import type { Config, Linter } from "@/types/config";
+import type { PkgManager } from "@/utils/cliParser";
 
 export type InitOptions = {
   template?: string;
