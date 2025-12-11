@@ -1,4 +1,4 @@
-# spice-cli
+# spice-dev
 
 A Simple interactive CLI for making Spicetify Themes/Extensions
 
