@@ -1,5 +1,5 @@
 {
-  "$id": "https://sanooj.uk/spice-cli/schema/v1.json",
+  "$id": "https://sanooj.uk/spice-dev/schema/v1.json",
   "title": "Spice CLI Config v1",
   "type": "object",
   "additionalProperties": false,

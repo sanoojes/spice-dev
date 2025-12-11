@@ -1,2 +1,2 @@
-export * from "@client/types/client";
-export * from "@client/types/spicetify";
+export * from "./types/client";
+export * from "./types/spicetify";

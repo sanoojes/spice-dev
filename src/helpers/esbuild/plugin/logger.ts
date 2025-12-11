@@ -1,13 +1,12 @@
 import type { Plugin } from "esbuild";
 import pc from "picocolors";
-import type { BuildCLIOptions } from "@/types/build";
+import { TICK } from "@/constants/symbols";
+import type { BuildOptions } from "@/types/build";
 import type { Config } from "@/types/config";
-import pkg from "@root/package.json";
-import { TICK } from "@/constants";
 import { formatBytes, formatCount, formatDuration } from "@/utils/format";
 
-export const buildLogger = (config: Config & BuildCLIOptions): Plugin => ({
-  name: "spice-cli-build-logger",
+export const buildLogger = (config: Config & BuildOptions): Plugin => ({
+  name: "spice-dev-build-logger",
   setup(build) {
     let start: number | null = null;
 
@@ -15,13 +14,6 @@ export const buildLogger = (config: Config & BuildCLIOptions): Plugin => ({
 
     build.onStart(() => {
       start = Date.now();
-
-      const nameLabel = config.type ? ` ${config.type}` : "";
-      console.log(
-        `${pc.cyan(
-          `${pkg.name} v${pkg.version}`,
-        )} ${pc.green(`building${nameLabel} for production...`)}`,
-      );
     });
 
     build.onEnd((result) => {
@@ -82,10 +74,14 @@ export const buildLogger = (config: Config & BuildCLIOptions): Plugin => ({
         const pathLabel = o.path.padEnd(maxPathLength, " ");
         const sizeLabel = formatBytes(o.bytes).padStart(7, " ");
 
-        console.log(`${pathLabel}  ${sizeLabel}`);
+        console.log(`${pathLabel}   ${sizeLabel}`);
       }
 
-      console.log(pc.green(`${TICK} built in ${timeLabel}`));
+      console.log(pc.cyan(`built in ${timeLabel}`));
+
+      if (config.watch) {
+        console.log(pc.green(``));
+      }
     });
   },
 });

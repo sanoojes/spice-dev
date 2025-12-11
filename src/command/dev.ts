@@ -1,5 +1,5 @@
 import type { Command } from "commander";
-import type { CLIOptions } from "@/types/init";
+import type { InitOptions } from "@/types/init";
 
-type DevAction = (options: CLIOptions, command: Command) => void;
+type DevAction = (options: InitOptions, command: Command) => void;
 export const dev: DevAction = async (opts, cmd) => {};

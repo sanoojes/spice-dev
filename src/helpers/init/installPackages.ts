@@ -2,7 +2,7 @@
 
 import { log } from "@clack/prompts";
 import spawn from "cross-spawn";
-import type { PkgManager } from "@/helpers/init/parsePkgManager";
+import type { PkgManager } from "@/utils/cliParser";
 
 /**
  * Spawn a package manager installation based on user preference.

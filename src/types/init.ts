@@ -1,8 +1,8 @@
 import type { Command } from "commander";
-import type { PkgManager } from "@/helpers/init/parsePkgManager";
-import type { Linter } from "@/types/config";
+import type { PkgManager } from "@/utils/cliParser";
+import type { Config, Linter } from "@/types/config";
 
-export type CLIOptions = {
+export type InitOptions = {
   template?: string;
   eslint?: boolean;
   biome?: boolean;
@@ -13,7 +13,7 @@ export type CLIOptions = {
 export type InitAnswers = {
   projectName: string;
   projectDir: string;
-  template: string;
+  template: Config["type"];
   useTs: boolean;
   useReact: boolean;
   linter: Linter;
@@ -23,6 +23,6 @@ export type InitAnswers = {
 
 export type InitAction = (
   projectName: string | undefined,
-  options: CLIOptions,
+  options: InitOptions,
   command: Command,
 ) => void | Promise<void>;

@@ -1,73 +1,53 @@
-import { resolve } from "node:path";
-import autoprefixer from "autoprefixer";
 import {
-  type BuildOptions,
-  context,
+  type BuildOptions as EsbuildOptions,
   build as esbuild,
   type Plugin,
+  context,
 } from "esbuild";
-import postcssNested from "postcss-nested";
-import { externalGlobal } from "@/helpers/esbuild/plugins/externalGlobal";
-import { buildLogger } from "@/helpers/esbuild/plugins/logger";
-import { postcssPlugin } from "@/helpers/esbuild/plugins/postcss";
-import type { BuildAction } from "@/types/build";
+import {
+  COMMON_ESBUILD_OPTIONS,
+  DEFAULT_ESBUILD_PLUGIN,
+  DEFAULT_POSTCSS_PLUGIN,
+} from "@/constants/build";
+import { buildLogger } from "@/helpers/esbuild/plugin/logger";
+import { postcssPlugin } from "@/helpers/esbuild/plugin/postcss";
+import type { BuildOptions } from "@/types/build";
 import { getConfig } from "@/utils/config";
+import * as pc from "picocolors";
+import { BANNER } from "@/constants/project";
 
-export const build: BuildAction = async (opts) => {
-  try {
-    const { watch, minify, sourcemap } = opts;
+export const build = async (opts: BuildOptions) => {
+  const { minify, watch, sourcemap } = opts;
 
-    const config = await getConfig();
-    const { entry, framework, outDir } = config;
+  const config = await getConfig();
 
-    const entryPoints = [resolve(entry)];
+  const nameLabel = config.type ? ` ${config.type}` : "";
+  console.log(
+    `${pc.cyan(BANNER)} ${pc.green(`building${nameLabel} for production...`)}`,
+  );
 
-    const plugins: Plugin[] = [
-      buildLogger(config),
-      postcssPlugin({
-        plugins: [postcssNested, autoprefixer],
-        sourcemap,
-      }),
-      externalGlobal(
-        framework === "react"
-          ? {
-              react: "Spicetify.React",
-              "react-dom": "Spicetify.ReactDOM",
-              "react/jsx-runtime": "Spicetify.ReactJSX",
-              "react-dom/client": "Spicetify.ReactDOM",
-              "react-dom/server": "Spicetify.ReactDOMServer",
-            }
-          : {},
-      ),
-    ];
+  const buildPlugins: Plugin[] = [
+    buildLogger({ ...config, ...opts }),
+    postcssPlugin({
+      plugins: [...DEFAULT_POSTCSS_PLUGIN],
+      minify,
+      sourcemap: watch,
+    }),
+  ];
 
-    const buildOptions: BuildOptions = {
-      entryPoints,
-      outdir: outDir ?? "./dist",
-      minify: Boolean(minify),
-      sourcemap,
-      bundle: true,
-      format: "esm",
-      jsx: "transform",
-      treeShaking: true,
-      platform: "browser",
-      legalComments: "external",
-      external: ["react", "react-dom"],
-      tsconfig: "tsconfig.json",
-      plugins,
-    };
+  const buildOptions: EsbuildOptions = {
+    ...COMMON_ESBUILD_OPTIONS,
+    minify,
+    entryPoints: [config.entry],
+    outdir: config.outDir ?? "./dist",
+    sourcemap: watch || sourcemap ? "inline" : false,
+    plugins: [...DEFAULT_ESBUILD_PLUGIN, ...buildPlugins],
+  };
 
-    let ctx: Awaited<ReturnType<typeof context>> | null = null;
-
-    if (watch) {
-      ctx = await context(buildOptions);
-      await ctx.watch();
-    } else {
-      await esbuild(buildOptions);
-      return;
-    }
-  } catch (err) {
-    console.error("Unexpected Error:", err);
-    process.exitCode = 1;
+  if (watch) {
+    const ctx = await context(buildOptions);
+    await ctx.watch();
+  } else {
+    await esbuild(buildOptions);
   }
 };

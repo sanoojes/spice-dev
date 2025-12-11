@@ -88,7 +88,7 @@ if (typeof window !== "undefined") {
         const fs = await import("node:fs/promises");
         const source = await fs.readFile(args.path, "utf8");
         return {
-          contents: `${source}\n\n/* --- HMR runtime injected by spice-cli --- */\n${code}`,
+          contents: `${source}\n\n/* --- HMR runtime injected by spice-dev --- */\n${code}`,
           loader: "ts",
         };
       },

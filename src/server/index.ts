@@ -1,6 +1,6 @@
 import http from "node:http";
-import { WebSocketServer, WebSocket } from "ws";
 import colors from "picocolors";
+import { WebSocket, WebSocketServer } from "ws";
 import { createShortcuts } from "@/utils/createShortcuts";
 import { findAvailablePort } from "@/utils/port";
 
@@ -100,7 +100,9 @@ export async function createDevServer({ port = 3030 }: ServerOptions) {
       const stop = () => {
         console.log(colors.gray("  Stopping server..."));
         disposeShortcuts(); // Remove CLI listeners
-        wss.clients.forEach((c) => c.terminate()); // Kill WS connections
+        wss.clients.forEach((c) => {
+          c.terminate();
+        }); // Kill WS connections
         wss.close();
         server.close(() => {
           console.log(colors.gray("  Server stopped."));

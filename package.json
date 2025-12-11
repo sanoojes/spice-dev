@@ -37,14 +37,11 @@
   "scripts": {
     "build": "bun build ./src/index.ts --target node --outdir dist --minify --sourcemap=none",
     "build:dev": "bun run build --watch",
+    "check": "bunx biome check --write",
     "dev": "bun ./src/index.ts",
     "dev:node": "bun run build && node ./dist/index.js",
-    "check": "bunx biome check",
-    "check:fix": "bunx biome check --write",
-    "format": "bunx biome format",
-    "format:fix": "bunx biome format --write",
-    "lint": "bunx biome lint",
-    "lint:fix": "bunx biome lint --write",
+    "format": "bunx biome format --write",
+    "lint": "bunx biome lint --write",
     "prepack": "bun run build",
     "pack:dev": "bun pm pack",
     "prepublish": "bun run lint && bun run typecheck && bun run build",
@@ -63,8 +60,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.8",
-    "@types/bun": "latest",
     "@types/cross-spawn": "^6.0.6",
+    "@types/node": "^25.0.0",
     "@types/ws": "^8.18.1",
     "typescript": "^5.9.3"
   }

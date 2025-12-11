@@ -3,14 +3,16 @@
 import { Command } from "commander";
 import { build } from "@/command/build";
 import { init } from "@/command/init";
-import { parsePkgManager } from "@/helpers/init/parsePkgManager";
+import { parsePkgManager } from "@/utils/cliParser";
 import { getPkgManager } from "@/utils/getPkgManager";
+import { BANNER } from "./constants/project";
 
 const program = new Command();
 
 program
-  .name("spice-cli")
-  .description("A Powerful tool for making Spicetify Themes/Extensions");
+  .name("spice-dev")
+  .description("A Powerful tool for making Spicetify Themes/Extensions")
+  .addHelpText("before", `${BANNER}\n`);
 
 // init
 program
@@ -35,16 +37,7 @@ program
   .description("Build the Spicetify theme/extension for production")
   .option("-w, --watch", "Rebuild on file changes", false)
   .option("-m, --minify", "Minify the output bundle", false)
-  .option("--sourcemap", "Generate source maps", false)
-  .action(build);
-
-// dev
-program
-  .command("dev")
-  .description("Run the Spicetify theme/extension in dev mode")
-  .option("-w, --watch", "Rebuild on file changes", true)
-  .option("-m, --minify", "Minify the output bundle", true)
-  .option("--sourcemap", "Generate source maps", true)
+  .option("--sourcemap", "Enables inline sourcemap", false) // gotta test if it will work
   .action(build);
 
 program.parse();

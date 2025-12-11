@@ -3,7 +3,7 @@ import type { InitAnswers } from "@/types/init";
 import { FileManager } from "@/utils/fileManager";
 import { writeFile } from "node:fs/promises";
 import { getBiomeConfig } from "@/helpers/init/getBiomeConfig";
-import { BIOME_JS_VERSION } from "@/constants";
+import { BIOME_JS_VERSION } from "@/constants/init";
 
 const templateRoot = __dirname;
 

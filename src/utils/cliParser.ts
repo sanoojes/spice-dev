@@ -11,3 +11,15 @@ export function parsePkgManager(value: string): PkgManager {
   }
   return value as PkgManager;
 }
+
+const validFramework = ["react", "vanilla"] as const;
+export type Framework = (typeof validFramework)[number];
+
+export function parseFramework(value: string): PkgManager {
+  if (!validFramework.includes(value as Framework)) {
+    throw new InvalidOptionArgumentError(
+      `Invalid framework: "${value}". Use one of: ${validFramework.join(", ")}`,
+    );
+  }
+  return value as PkgManager;
+}

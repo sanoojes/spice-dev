@@ -2,8 +2,9 @@ import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import * as p from "@clack/prompts";
 import { createTemplate } from "@root/template";
-import { BIOME_JS_VERSION } from "@/constants";
+import { BIOME_JS_VERSION } from "@/constants/init";
 import { installPackages } from "@/helpers/init/installPackages";
+import type { Config } from "@/types/config";
 import type { InitAnswers } from "@/types/init";
 import { exists } from "@/utils/fs";
 import { PackageJsonBuilder } from "@/utils/PackageJsonBuilder";
@@ -67,29 +68,35 @@ function logPlannedPackages(pkg: {
   const devDeps = Object.entries(pkg.devDependencies ?? {});
 
   if (!deps.length && !devDeps.length) {
-    p.log.info("No dependencies or devDependencies found in package.json.");
+    p.note(
+      "No dependencies or devDependencies found in package.json.",
+      "Packages",
+    );
     return;
   }
 
-  p.log.step("Packages to be installed (from package.json):");
+  const lines: string[] = [];
 
   if (deps.length) {
-    p.log.info(`Dependencies (${deps.length}):`);
+    lines.push(`Dependencies (${deps.length}):`);
     for (const [name, version] of deps) {
-      p.log.message(`  • ${name}@${version}`);
+      lines.push(` • ${name}@${version}`);
     }
   }
 
   if (devDeps.length) {
-    p.log.info(`Dev dependencies (${devDeps.length}):`);
+    if (lines.length) lines.push("");
+    lines.push(`Dev dependencies (${devDeps.length}):`);
     for (const [name, version] of devDeps) {
-      p.log.message(` • ${name}@${version}`);
+      lines.push(` • ${name}@${version}`);
     }
   }
+
+  p.note(lines.join("\n"), "Packages to be installed");
 }
 
 async function createSpiceDevConfig(answers: InitAnswers) {
-  const config = {
+  const config: Config = {
     $schema: "https://sanooj.uk/spice-dev/schema/v1.json",
     version: "1.0.0",
     name: answers.projectName,
@@ -110,13 +117,13 @@ async function createPackageJson(answers: InitAnswers) {
     name: answers.projectName,
     version: "0.1.0",
     scripts: {
-      dev: "spice-cli dev",
-      build: "spice-cli build",
+      dev: "spice-dev dev",
+      build: "spice-dev build",
       lint: answers.linter === "eslint" ? "eslint" : "biome lint",
     },
     dependencies: {},
     devDependencies: {
-      "spice-cli": "^1.0.1",
+      "spice-dev": "^1.0.0",
     },
   });
 

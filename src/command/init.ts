@@ -2,34 +2,29 @@ import { join, relative } from "node:path";
 import { chdir, cwd } from "node:process";
 import * as p from "@clack/prompts";
 import * as pc from "picocolors";
-import { linterOptions, templateOptions } from "@/constants";
+import { linterOptions, templateOptions } from "@/constants/init";
 import { createExtension } from "@/helpers/init/createExtension";
 import { createTheme } from "@/helpers/init/createTheme";
-import type { Linter } from "@/types/config";
+import type { Config, Linter } from "@/types/config";
 import type { InitAction, InitAnswers } from "@/types/init";
 import { ensureDir, exists, isEmptyDir } from "@/utils/fs";
 
-export const init: InitAction = async (name, options) => {
+export const init: InitAction = async (name, opts) => {
   try {
-    const opts = options;
     const initialCwd = cwd();
 
-    p.intro("Welcome to the Spicetify Dev CLI");
+    p.intro(`Starting new Spicetify project`);
 
     const answers: InitAnswers = await p.group(
       {
         // PROJECT NAME
         projectName: async () =>
           !name
-            ? (
-                await p.text({
-                  message: "Where would you like your project to be created?",
-                  placeholder: "(hit Enter to use './')",
-                  defaultValue: "./",
-                })
-              )
-                .toString()
-                .trim()
+            ? ((await p.text({
+                message: "Where would you like your project to be created?",
+                placeholder: "(hit Enter to use './')",
+                defaultValue: "./",
+              })) as string)
             : name.trim(),
 
         // PROJECT DIR
@@ -90,11 +85,11 @@ export const init: InitAction = async (name, options) => {
               message: "Which template would you like?",
               options: templateOptions,
               initialValue: "theme",
-            })) as string;
+            })) as Config["type"];
           }
 
           p.log.info(`Using template: ${cliTemplate}`);
-          return cliTemplate;
+          return cliTemplate as Config["type"];
         },
 
         linter: async () => {
@@ -125,12 +120,12 @@ export const init: InitAction = async (name, options) => {
             initialValue: false,
           }),
 
-        skipInstall: async () => options.skipInstall ?? false,
+        skipInstall: async () => opts.skipInstall ?? false,
         pkgManager: async () => {
           // TODO: Add a prompt ?
           // i don't think its necessary and use the pkgManager thats used to init
           // DEFAULT: currently using one
-          return options.use;
+          return opts.use;
         },
       },
       {
